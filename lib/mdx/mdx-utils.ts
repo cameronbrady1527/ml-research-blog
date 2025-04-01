@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { compileMDX } from 'next-mdx-remote/rsc';
+import { MDXContent } from '@/types/mdx-content';
+import { MDXFrontMatter, ContentMeta } from '@/types/mdx-front-matter';
 
 // circle back to this... assumes you are running the code from the root (/)
 const contentDirectory = path.join(process.cwd(), 'content');
@@ -9,12 +11,15 @@ const contentDirectory = path.join(process.cwd(), 'content');
 export async function getContentBySlug(
     directory: string,
     slug: string
-) {
+): Promise<MDXContent> {
     const fullPath = path.join(contentDirectory, directory, `${slug}.mdx`);
     const fileContents = fs.readFileSync(fullPath, 'utf-8');
 
     // use gray-matter to parse the metadata of the post
-    const { data: frontMatter, content } = matter(fileContents);
+    const { data: frontMatter, content } = matter(fileContents) as {
+        data: MDXFrontMatter;
+        content: string;
+    };
 
     // use next-mdx-remote to compile the MDX content
     const mdxSource = await compileMDX({
@@ -33,7 +38,7 @@ export async function getContentBySlug(
     }
 }
 
-export async function getAllSlugs(directory: string) {
+export async function getAllSlugs(directory: string): Promise<string[]> {
     const fullPath = path.join(contentDirectory, directory);
     const fileNames = fs.readdirSync(fullPath);
 
@@ -42,24 +47,24 @@ export async function getAllSlugs(directory: string) {
         .map(filename => filename.replace(/\.mdx$/, ''));
 }
 
-// export async function getAllContent(directory: string) {
-//     const slugs = getAllSlugs(directory);
+export async function getAllContent(directory: string): Promise<ContentMeta[]> {
+    const slugs = getAllSlugs(directory);
 
-//     const metadataContent = await Promise.all(
-//         (await slugs).map(async (slug) => {
-//             const { frontMatter } = await getContentBySlug(directory, slug);
-//             return {
-//                 slug,
-//                 frontMatter
-//             }
-//         })
-//     )
+    const metadataContent = await Promise.all(
+        (await slugs).map(async (slug) => {
+            const { frontMatter } = await getContentBySlug(directory, slug);
+            return {
+                slug,
+                frontMatter
+            }
+        })
+    )
 
-//     // sort by date if frontMatter contains date
-//     return metadataContent.sort((a, b) => {
-//         if (a.frontMatter.date && b.frontMatter.date) {
-//             return new Date(b.frontMatter.date) > new Date(a.frontMatter.date) ? 1 : -1
-//         }
-//         return 0;
-//     })
-// }
+    // sort by date if frontMatter contains date
+    return metadataContent.sort((a, b) => {
+        if (a.frontMatter.date && b.frontMatter.date) {
+            return new Date(b.frontMatter.date) > new Date(a.frontMatter.date) ? 1 : -1
+        }
+        return 0;
+    })
+}
