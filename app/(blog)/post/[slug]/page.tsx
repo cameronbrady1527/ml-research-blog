@@ -16,18 +16,15 @@ interface PageParams {
   slug: string;
 }
 
-export default async function BlogPost({
-  params: { slug },
-}: {
-  params: PageParams;
-}) {
+export default async function BlogPost({ params }: { params: Promise<PageParams> }) {
+  const { slug } = await params;
   const post = await client.fetch<Post>(postQuery, { slug });
 
   return (
     <article className="prose">
       <h1>{post.title}</h1>
       <Image
-        src={urlFor(post.mainImage).url()}
+        src={post.mainImage && urlFor(post.mainImage).url()}
         width={300}
         height={200}
         alt={post.title}
