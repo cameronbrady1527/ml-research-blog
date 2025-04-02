@@ -21,11 +21,6 @@ export default async function BlogPost({ params }: { params: { slug: string } })
                         {new Date(frontMatter.date).toLocaleDateString()}
                     </p>
                 )}
-                {frontMatter.description && (
-                    <p className="">
-
-                    </p>
-                )}
                 {content}
             </div>
         )
