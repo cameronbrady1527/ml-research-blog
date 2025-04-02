@@ -8,5 +8,5 @@ export interface Post {
         current: string;
     };
     body: TypedObject | TypedObject[]
-    // mainImage: string | StaticImport
+    mainImage: string | StaticImport
 }
