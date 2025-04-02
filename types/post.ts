@@ -1,3 +1,4 @@
+import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import { TypedObject } from "sanity";
 
@@ -8,5 +9,5 @@ export interface Post {
         current: string;
     };
     body: TypedObject | TypedObject[]
-    mainImage: string | StaticImport
+    mainImage: SanityImageSource
 }
