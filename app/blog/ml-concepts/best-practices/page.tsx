@@ -6,7 +6,7 @@ export default function MLTutorials() {
             <Link href="/blog" className="hover:underline">
                 ← Back to posts
             </Link>
-            <h1 className="">Machine Learning Best Practices</h1>
+            <h1 className="font-bold">Machine Learning Best Practices</h1>
             <p>Best Practices in ML will live here</p>
         </main>
     )

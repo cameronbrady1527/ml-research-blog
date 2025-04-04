@@ -6,7 +6,7 @@ export default function MLMath() {
             <Link href="/blog" className="hover:underline">
                 ← Back to posts
             </Link>
-            <h1 className="">Machine Learning Math</h1>
+            <h1 className="font-bold">Machine Learning Math</h1>
             <p>Posts regarding machine learning math will live here</p>
         </main>
     )
