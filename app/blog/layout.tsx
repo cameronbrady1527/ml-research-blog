@@ -54,7 +54,6 @@ export default function BlogLayout({ children }: { children: ReactNode }) {
               </div>   
             </main>
           </SidebarProvider>
-            
         </body>
       </html>
     )
