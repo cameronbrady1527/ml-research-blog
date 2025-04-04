@@ -25,7 +25,7 @@ export default function NeurologicalInsights() {
                     </Link>
                 </li>
             </ul>
-            <h1 className="font-bold">Neurological Insights Content</h1>
+            <h1 className="text-4xl font-bold mb-8">Neurological Insights Content</h1>
             <p>Articles regarding neurological insights will go down here</p>
         </main>
     )

@@ -30,7 +30,7 @@ export default function MLConcepts() {
                     </Link>
                 </li>
             </ul>
-            <h1 className="font-bold">Machine Learning Concepts</h1>
+            <h1 className="text-4xl font-bold mb-8">Machine Learning Concepts</h1>
             <p>Articles regarding ml concepts will go down here</p>
         </main>
     )

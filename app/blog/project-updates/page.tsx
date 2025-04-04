@@ -25,7 +25,7 @@ export default function ProjectUpdates() {
                     </Link>
                 </li>
             </ul>
-            <h1 className="font-bold">Project Updates</h1>
+            <h1 className="text-4xl font-bold mb-8">Project Updates</h1>
             <p>Articles regarding project updates will go down here</p>
         </main>
     )

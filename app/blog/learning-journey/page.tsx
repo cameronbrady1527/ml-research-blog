@@ -25,7 +25,7 @@ export default function LearningJourney() {
                     </Link>
                 </li>
             </ul>
-            <h1 className="font-bold">Learning Journey Content</h1>
+            <h1 className="text-4xl font-bold mb-8">Learning Journey Content</h1>
             <p>Articles regarding my learning journey will go down here</p>
         </main>
     )
