@@ -10,17 +10,17 @@ export default function LearningJourney() {
                     </Link>
                 </li>
                 <li>
-                    <Link href="/blog/ml-concepts/personal-growth" className="hover:underline">
+                    <Link href="/blog/learning-journey/personal-growth" className="hover:underline">
                         Personal Growth
                     </Link>
                 </li>
                 <li>
-                    <Link href="/blog/ml-concepts/lessons-learned" className="hover:underline">
+                    <Link href="/blog/learning-journey/lessons-learned" className="hover:underline">
                         Lessons learned
                     </Link>
                 </li>
                 <li>
-                    <Link href="/blog/ml-concepts/resources-discovered" className="hover:underline">
+                    <Link href="/blog/learning-journey/resources-discovered" className="hover:underline">
                         Resources Discovered
                     </Link>
                 </li>
