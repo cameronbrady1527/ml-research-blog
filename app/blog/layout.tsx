@@ -22,8 +22,8 @@ export default function BlogLayout({ children }: { children: ReactNode }) {
     return (
       <SidebarProvider className="flex">
         <AppSidebar />
-        <main className="flex-1 ">
-          <SidebarInset>
+        <main className="flex-1">
+          <SidebarInset className="sticky top-0">
             <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
               <div className="flex items-center gap-2 px-4">
                 <SidebarTrigger className="-ml-1" />
