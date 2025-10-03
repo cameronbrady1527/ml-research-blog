@@ -1,13 +1,29 @@
-import Link from "next/link";
+import { PostDisplay } from "@/components/blog/post-display";
+import { PostControls } from "@/components/blog/post-controls";
+
+const POSTS_QUERY = `*[
+    _type == "post"
+    && defined(slug.current)
+    && "Diagnosis Challenges" in categories[]->title
+    ]|order(publishedAt desc){
+    _id,
+    title,
+    slug,
+    publishedAt,
+    excerpt,
+    "categories": categories[]->title
+}`;
 
 export default function NeuroDiagnosisChallenges() {
     return (
-        <main className="container mx-auto min-h-screen max-w-3xl p-8 flex flex-col gap-4">
-            <Link href="/blog" className="hover:underline">
-                ← Back to posts
-            </Link>
-            <h1 className="font-bold">Neurological Disorder Diagnosis Challenges</h1>
-            <p>Articles regarding Neurological Disorder Diagnosis Challenges will live here</p>
+        <main className="container mx-auto min-h-screen max-w-4xl p-8 flex flex-col gap-4">
+            <div className="mb-8">
+                <h1 className="text-4xl font-bold mb-2">Diagnosis Challenges</h1>
+                <p className="text-muted-foreground">Obstacles and complexities in neurological diagnosis</p>
+            </div>
+
+            <PostControls />
+            <PostDisplay postsQuery={POSTS_QUERY} />
         </main>
     )
 }
