@@ -36,17 +36,53 @@ export function PostListWithFilter({ posts, excludeTags = [] }: PostListWithFilt
   // State for selected tags - default to all tags selected
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set(allTags));
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("newest");
 
-  // Filter posts based on selected tags
+  // Filter and sort posts based on selected tags, search query, and sort option
   const filteredPosts = useMemo(() => {
     if (selectedTags.size === 0) return [];
 
-    return posts.filter((post) => {
+    let filtered = posts.filter((post) => {
       if (!post.categories || !Array.isArray(post.categories)) return false;
+
       // Post should have at least one of the selected tags
-      return post.categories.some((category: string) => selectedTags.has(category));
+      const matchesTag = post.categories.some((category: string) => selectedTags.has(category));
+      if (!matchesTag) return false;
+
+      // If there's a search query, check if post matches
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase();
+        const titleMatch = post.title?.toLowerCase().includes(query);
+        const excerptMatch = post.excerpt?.toLowerCase().includes(query);
+        const categoryMatch = post.categories.some((cat: string) =>
+          cat.toLowerCase().includes(query)
+        );
+
+        return titleMatch || excerptMatch || categoryMatch;
+      }
+
+      return true;
     });
-  }, [posts, selectedTags]);
+
+    // Sort filtered posts
+    const sorted = [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case "newest":
+          return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+        case "oldest":
+          return new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime();
+        case "alphabetical":
+          return (a.title || "").localeCompare(b.title || "");
+        case "reverse-alphabetical":
+          return (b.title || "").localeCompare(a.title || "");
+        default:
+          return 0;
+      }
+    });
+
+    return sorted;
+  }, [posts, selectedTags, searchQuery, sortBy]);
 
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) => {
@@ -78,21 +114,30 @@ export function PostListWithFilter({ posts, excludeTags = [] }: PostListWithFilt
           <input
             type="text"
             placeholder="Search posts..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-4 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-ring"
-            disabled
           />
         </div>
 
         {/* Sort & Filter */}
         <div className="flex gap-2">
           <select
-            className="px-4 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-ring"
-            disabled
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="px-4 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer appearance-none hover:bg-muted transition-colors"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+              backgroundPosition: 'right 0.5rem center',
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: '1.5em 1.5em',
+              paddingRight: '2.5rem'
+            }}
           >
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>
-            <option value="title-asc">Title (A-Z)</option>
-            <option value="title-desc">Title (Z-A)</option>
+            <option value="alphabetical">Alphabetically</option>
+            <option value="reverse-alphabetical">Reverse Alphabetically</option>
           </select>
 
           <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
@@ -160,7 +205,11 @@ export function PostListWithFilter({ posts, excludeTags = [] }: PostListWithFilt
       {/* Post Display */}
       {filteredPosts.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-lg text-muted-foreground">No posts found with the selected tags.</p>
+          <p className="text-lg text-muted-foreground">
+            {searchQuery.trim()
+              ? `No posts found matching "${searchQuery}"`
+              : "No posts found with the selected tags."}
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6">
