@@ -4,7 +4,8 @@ import { PostControls } from "@/components/blog/post-controls";
 const POSTS_QUERY = `*[
     _type == "post"
     && defined(slug.current)
-    && "Algorithms" in categories[]->title
+    && "ml-concepts" in categories[]->slug.current
+    && "algorithms" in categories[]->slug.current
     ]|order(publishedAt desc){
     _id,
     title,

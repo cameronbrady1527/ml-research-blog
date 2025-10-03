@@ -5,7 +5,7 @@ import { PostControls } from "@/components/blog/post-controls";
 const POSTS_QUERY = `*[
     _type == "post"
     && defined(slug.current)
-    && "Project Updates" in categories[]->title
+    && "project-updates" in categories[]->slug.current
     ]|order(publishedAt desc){
     _id,
     title,
