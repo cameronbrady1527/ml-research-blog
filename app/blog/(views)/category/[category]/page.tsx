@@ -1,6 +1,4 @@
-import { client } from "@/sanity/lib/client";
 import Link from "next/link";
-import { type SanityDocument } from "next-sanity";
 import { PostDisplay } from "@/components/blog/post-display";
 
 // Constant post query because always getting all posts at /blog
@@ -12,7 +10,7 @@ export default async function BlogCategoryPage({ params }: { params: { category:
     const postsQuery = `*[
         _type == "post"
         && defined(slug.current)
-        && "test" in categories[]->title
+        && ${await params.category} in categories[]->title
         ]|order(publishedAt desc)[0...12]{
         _id,
         title,

@@ -8,7 +8,6 @@ const options = { next: { revalidate: 30 } };
 
 export async function PostDisplay({ postsQuery }: { postsQuery: string }) {
   const posts = await client.fetch<SanityDocument[]>(postsQuery, {}, options);
-  console.log(posts[0].categories);
 
   return (
     <ul className="flex flex-col gap-y-4">
