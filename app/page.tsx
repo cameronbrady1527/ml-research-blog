@@ -140,7 +140,7 @@ export default async function Home() {
                 <p className="text-xs text-muted-foreground mb-3">
                   {new Date(post.publishedAt).toLocaleDateString()}
                 </p>
-                <h3 className="text-xl font-semibold mb-2 hover:underline">{post.title}</h3>
+                <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
               </Link>
             ))}
           </div>
@@ -149,7 +149,7 @@ export default async function Home() {
         )}
 
         <div className="text-center">
-          <Link href="/blog" className="inline-block text-lg font-semibold hover:underline">
+          <Link href="/blog" className="inline-block text-lg font-semibold hover:opacity-70 transition-opacity">
             View all posts →
           </Link>
         </div>
@@ -164,21 +164,21 @@ export default async function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           <Link href="/blog/ml-concepts" className="border rounded-lg p-8 hover:border-foreground hover:shadow-lg transition-all group">
-            <h3 className="text-2xl font-semibold mb-3 group-hover:underline">ML Concepts</h3>
+            <h3 className="text-2xl font-semibold mb-3">ML Concepts</h3>
             <p className="text-muted-foreground">
               Algorithms, best practices, and theory
             </p>
           </Link>
 
           <Link href="/blog/neurological-insights" className="border rounded-lg p-8 hover:border-foreground hover:shadow-lg transition-all group">
-            <h3 className="text-2xl font-semibold mb-3 group-hover:underline">Neurological Insights</h3>
+            <h3 className="text-2xl font-semibold mb-3">Neurological Insights</h3>
             <p className="text-muted-foreground">
               Understanding the brain and disorders
             </p>
           </Link>
 
           <Link href="/blog/project-updates" className="border rounded-lg p-8 hover:border-foreground hover:shadow-lg transition-all group">
-            <h3 className="text-2xl font-semibold mb-3 group-hover:underline">Project Updates</h3>
+            <h3 className="text-2xl font-semibold mb-3">Project Updates</h3>
             <p className="text-muted-foreground">
               Research progress and findings
             </p>

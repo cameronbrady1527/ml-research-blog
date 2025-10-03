@@ -50,29 +50,37 @@ export function Header({ navItems }: { navItems: NavItem[] }) {
       <NavigationMenuList>
         {navItems && navItems.map((navItem) => (
           <NavigationMenuItem key={navItem.name}>
-            {/* Trigger is a link... hover over it to display its items */}
-            <NavigationMenuTrigger>
+            {navItem.items ? (
+              <>
+                {/* Items with subcategories - show trigger with arrow */}
+                <NavigationMenuTrigger>
+                  <Link href={navItem.url} legacyBehavior passHref>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                      {navItem.name}
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                    {navItem.items.map((subItem) => (
+                      <ListItem
+                        key={subItem.name}
+                        title={subItem.name}
+                        href={subItem.url}
+                      >
+                        {subItem.description}
+                      </ListItem>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </>
+            ) : (
+              /* Items without subcategories - show as plain link */
               <Link href={navItem.url} legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   {navItem.name}
                 </NavigationMenuLink>
               </Link>
-            </NavigationMenuTrigger>
-            {/* Navigation menu content */}
-            {navItem.items && (
-              <NavigationMenuContent>
-                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                  {navItem.items.map((subItem) => (
-                    <ListItem
-                      key={subItem.name}
-                      title={subItem.name}
-                      href={subItem.url}
-                    >
-                      {subItem.description}
-                    </ListItem>
-                  ))}
-                </ul>
-              </NavigationMenuContent>
             )}
           </NavigationMenuItem>
         ))}
