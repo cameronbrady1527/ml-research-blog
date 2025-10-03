@@ -3,14 +3,6 @@ import { ReactNode } from 'react'
 import Link from 'next/link';
 
 import { AppSidebar } from "@/components/app-sidebar"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
@@ -21,6 +13,7 @@ import {
   Header
 } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { DynamicBreadcrumb } from "@/components/blog/dynamic-breadcrumb";
 
 const navItems = [
   {
@@ -98,23 +91,11 @@ export default function BlogLayout({ children }: { children: ReactNode }) {
               <div className="flex items-center gap-2 px-4">
                 <SidebarTrigger className="-ml-1" />
                 <Separator orientation="vertical" className="mr-2 h-4" />
-                <Link href="/" className="text-lg font-semibold hover:underline">
+                <Link href="/" className="text-lg font-semibold">
                   ML Research Blog
                 </Link>
                 <Separator orientation="vertical" className="mx-2 h-4" />
-                <Breadcrumb>
-                  <BreadcrumbList>
-                    <BreadcrumbItem className="hidden md:block">
-                      <BreadcrumbLink href="#">
-                        ML Concepts
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator className="hidden md:block" />
-                    <BreadcrumbItem>
-                      <BreadcrumbPage>Algorithms</BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </BreadcrumbList>
-                </Breadcrumb>
+                <DynamicBreadcrumb />
               </div>
               <div className="ml-auto pr-4">
                 <Header navItems={navItems}/>
