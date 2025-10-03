@@ -3,8 +3,15 @@ import imageUrlBuilder from "@sanity/image-url";
 import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { PortableText, type SanityDocument } from "next-sanity";
 import Link from "next/link";
+import { portableTextComponents } from "@/components/blog/portable-text-components";
 
-const POST_QUERY = `*[_type == "post" && slug.current == $slug][0] { title, image, publishedAt, body }`;
+const POST_QUERY = `*[_type == "post" && slug.current == $slug][0] {
+  title,
+  image,
+  publishedAt,
+  body,
+  "categories": categories[]->title
+}`;
 
 const { projectId, dataset } = client.config();
 const urlFor = (source: SanityImageSource) =>
@@ -25,24 +32,61 @@ export default async function PostPage({
     : null;
 
   return (
-    <main className="container mx-auto min-h-screen max-w-3xl p-8 flex flex-col gap-4">
-      <Link href="/blog" className="hover:underline">
+    <main className="container mx-auto min-h-screen max-w-3xl p-8">
+      <Link href="/blog" className="text-muted-foreground hover:text-foreground transition-colors mb-8 inline-block">
         ← Back to posts
       </Link>
-      {postImageUrl && (
-        <img 
-          src={postImageUrl}
-          alt={post.title}
-          className="aspect-video rounded-xl"
-          width="550"
-          height="310"
-        />
-      )}
-      <h1 className="text-4xl font-bold mb-8">{post.title}</h1>
-      <div className="prose">
-        <p>Published: {new Date(post.publishedAt).toLocaleDateString()}</p>
-        {Array.isArray(post.body) && <PortableText value={post.body} />}
-      </div>
+
+      <article className="flex flex-col gap-6">
+        {/* Header section */}
+        <header className="flex flex-col gap-4">
+          <h1 className="text-4xl md:text-5xl font-bold leading-tight">{post.title}</h1>
+
+          {/* Metadata bar */}
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <time dateTime={post.publishedAt}>
+              {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </time>
+            {post.categories && post.categories.length > 0 && (
+              <>
+                <span>•</span>
+                <div className="flex gap-2 flex-wrap">
+                  {post.categories.map((category: string) => (
+                    <span
+                      key={category}
+                      className="px-2 py-1 bg-secondary text-secondary-foreground rounded text-xs"
+                    >
+                      {category}
+                    </span>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        </header>
+
+        {/* Featured image */}
+        {postImageUrl && (
+          <img
+            src={postImageUrl}
+            alt={post.title}
+            className="aspect-video rounded-xl border object-cover"
+            width="550"
+            height="310"
+          />
+        )}
+
+        {/* Content */}
+        <div className="max-w-none">
+          {Array.isArray(post.body) && (
+            <PortableText value={post.body} components={portableTextComponents} />
+          )}
+        </div>
+      </article>
     </main>
   )
 }
