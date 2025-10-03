@@ -1,5 +1,6 @@
-import { PostDisplay } from "@/components/blog/post-display";
-import { PostControls } from "@/components/blog/post-controls";
+import { client } from "@/sanity/lib/client";
+import { type SanityDocument } from "next-sanity";
+import { PostListWithFilter } from "@/components/blog/post-list-with-filter";
 
 const POSTS_QUERY = `*[
     _type == "post"
@@ -15,7 +16,11 @@ const POSTS_QUERY = `*[
     "categories": categories[]->title
 }`;
 
-export default function WeeklyMonthlyProgress() {
+const options = { next: { revalidate: 30 } };
+
+export default async function WeeklyMonthlyProgress() {
+    const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
+
     return (
         <main className="container mx-auto min-h-screen max-w-4xl p-8 flex flex-col gap-4">
             <div className="mb-8">
@@ -23,8 +28,7 @@ export default function WeeklyMonthlyProgress() {
                 <p className="text-muted-foreground">Regular updates on research progress</p>
             </div>
 
-            <PostControls />
-            <PostDisplay postsQuery={POSTS_QUERY} />
+            <PostListWithFilter posts={posts} excludeTags={["Project Updates", "WM Progress"]} />
         </main>
     )
 }
